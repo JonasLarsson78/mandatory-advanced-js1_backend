@@ -8,7 +8,7 @@ const io = require('socket.io')(server);
 app.use(cors());
 
 io.origins((origin, callback) => {
-  if (origin !== 'http://localhost:3000') {
+  if (origin !== 'http://localhost') {
     return callback('origin not allowed', false);
   }
   callback(null, true);
