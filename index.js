@@ -5,14 +5,8 @@ const port = 3010;
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-app.use(cors());
 
-io.origins((origin, callback) => {
-  if (origin !== 'http://localhost') {
-    return callback('origin not allowed', false);
-  }
-  callback(null, true);
-});
+app.use(cors());
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
