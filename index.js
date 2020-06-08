@@ -4,10 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const port = 3010;
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
-io.set('origins', '*:*');
-app.use(cors());
-app.options('*', cors());
+const io = require('socket.io')(server, { origins: '*:*' });
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
