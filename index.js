@@ -13,7 +13,7 @@ const server = express()
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
-io.use(cors());
+io.set('origins', 'http://localhost:3000/');
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
