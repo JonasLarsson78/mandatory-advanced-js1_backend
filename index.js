@@ -5,6 +5,7 @@ const port = 3010;
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
+app.use(cors());
 
 io.origins((origin, callback) => {
   if (origin !== 'http://localhost:3000') {
