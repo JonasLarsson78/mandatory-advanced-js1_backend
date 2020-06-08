@@ -1,20 +1,22 @@
-'use strict';
-
 const express = require('express');
-const socketIO = require('socket.io');
+const cors = require('cors');
+const { v4: uuidv4 } = require('uuid');
+const port = 3010;
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-const PORT = process.env.PORT || 3010;
-const INDEX = '/index.html';
-
-const server = express()
-  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
-
-const io = socketIO(server);
+server.use(cors());
+io.set('origins', '*:*');
 
 io.on('connection', (socket) => {
-  console.log('Client connected');
-  socket.on('disconnect', () => console.log('Client disconnected'));
+  socket.on('message', (message) => {
+    console.log(message);
+    const id = uuidv4();
+    const date = new Date();
+    const newMessage = { ...message, id, date };
+    io.sockets.emit('new_message', newMessage);
+  });
+  console.log('New User connected');
 });
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+server.listen(port, () => console.log(`App listening on port ${port}!`));
