@@ -9,11 +9,11 @@ const PORT = process.env.PORT || 3010;
 const INDEX = '/index.html';
 
 const server = express()
+  .use(cors())
   .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 const io = socketIO(server);
-io.set('origins', 'http://localhost:3000/');
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
