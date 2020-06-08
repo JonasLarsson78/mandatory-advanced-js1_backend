@@ -1,12 +1,19 @@
 const express = require('express');
-const cors = require('cors');
-const { v4: uuidv4 } = require('uuid');
-const port = 3010;
-const app = express();
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
+const socketIO = require('socket.io');
 
-server.use(cors());
+const cors = require('cors');
+
+const { v4: uuidv4 } = require('uuid');
+
+const PORT = process.env.PORT || 3010;
+const INDEX = '/index.html';
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const io = socketIO(server);
+io.use(cors());
 
 io.on('connection', (socket) => {
   socket.on('message', (message) => {
@@ -18,4 +25,3 @@ io.on('connection', (socket) => {
   });
   console.log('New User connected');
 });
-server.listen(port, () => console.log(`App listening on port ${port}!`));
